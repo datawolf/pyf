@@ -16,10 +16,12 @@ from launchpadlib.launchpad import Launchpad
 
 launchpad = Launchpad.login_with('openstack-dm', 'production')
 
+print  ' Name, karma,  email,    date,  link'
 for email in args.emails:
     try:
         person = launchpad.people.getByEmail(email=email)
         if person:
-            print person.name,  email,  person.web_link,    person.date_created.date()
+            print person.name, person.karma,  email,     person.date_created.date(),    person.web_link
     except:
         continue
+
