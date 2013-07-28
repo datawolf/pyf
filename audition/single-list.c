@@ -161,6 +161,42 @@ node*   insert(node *head, int num)
 
 
 }
+
+
+/**
+ * 单链表的排序 
+ *
+ * */
+
+node* sort(node* head)
+{
+    node *p, *p2, *p3;
+    int n;
+    int i,j;
+    int temp;
+
+    if (head == NULL || head->next == NULL)
+      return head;
+
+    n = length(head);
+
+    for (j = 1; j < n; j++)
+    {
+        p = head;
+        for(i = 0; i < n-j; i++)
+        {
+            if (p->data > p->next->data)
+            {
+                temp = p->data;
+                p->data = p->next->data;
+                p->next->data = temp;
+            }
+            p = p->next;
+        }
+    }
+
+    return head;
+}
 int main( int argc, char **argv)
 {
     node *head;
@@ -170,6 +206,8 @@ int main( int argc, char **argv)
     head = del(head, 5);
     print(head);
     head = insert(head, 5);
+    print(head);
+    head = sort(head);
     print(head);
 
     return 0;
