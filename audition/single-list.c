@@ -116,6 +116,51 @@ node *del(node *head, int num)
 
     return head;
 }
+
+/**
+ *单链表节点的插入
+ *
+ * */
+
+node*   insert(node *head, int num)
+{
+   node *p1, *p2, *s;
+
+   s = (node*)malloc(sizeof(node));
+   s->data = num;
+
+   p1 = head;
+   while(p1->data < s->data && p1->next != NULL)
+   {
+        p2 = p1;
+        p1 = p1->next;
+   }
+
+   //在链表头部插入节点
+   if (p1 == head)
+   {
+        s->next = p1;
+        head = s;
+        return head;
+   }
+
+   //在链表结尾插入节点
+   if (p1->next == NULL)
+   {
+        p1->next = s;
+        s->next = NULL;
+        return head;
+   }
+    //在链表中间插入节点
+   if (p1->next != NULL)
+   {
+        p2->next = s;
+        s->next = p1;
+        return head;
+   }
+
+
+}
 int main( int argc, char **argv)
 {
     node *head;
@@ -123,6 +168,8 @@ int main( int argc, char **argv)
     head = create();
     print(head);
     head = del(head, 5);
+    print(head);
+    head = insert(head, 5);
     print(head);
 
     return 0;
