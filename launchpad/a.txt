@@ -1,3 +1,0 @@
- Name,   email,  link,   date
-zhichao-wang zhichao.wang@bj.cs2c.com.cn https://launchpad.net/~zhichao-wang 2013-07-24
-gang-ye gang.ye@bj.cs2c.com.cn https://launchpad.net/~gang-ye 2012-08-27
