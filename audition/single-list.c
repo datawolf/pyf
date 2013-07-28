@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+/**
+ * 该文件是对单链表的一些操作，包括创建，删除，测量长度
+ * 逆置，排序等操作。
+ *
+ * 该链表包含头节点，头节点不存储数据域。
+ *
+ * 2013-07-28
+ */
 
 typedef     struct  Node
 {
@@ -24,7 +31,7 @@ node*   create()
     while(cycle)
     {
         printf("please input the data:");
-        scanf("%x", &x);
+        scanf("%d", &x);
 
         if (x != 0)
         {
@@ -36,7 +43,9 @@ node*   create()
         }else
           cycle = 0;
     }
-    head = head->next;
+//    head = head->next;
+    p->next = NULL;
+    return head;
 }
 
 /**
@@ -50,7 +59,7 @@ int length(node * head)
     
     p = head;
 
-    while (p != NULL)
+    while (p->next != NULL)
     {
         p = p->next;
         n++;
@@ -69,7 +78,7 @@ void print(node *head)
     int  n;
 
     n = length(head);
-    p = head;
+    p = head->next;;
 
     printf("\nNow, These %d records are : \n", n);
 
@@ -90,7 +99,7 @@ void print(node *head)
 node *del(node *head, int num)
 {
     node *p1, *p2;
-    p1 = head;
+    p1 = head->next;
 
     while (p1->data != num && p1->next != NULL)
     {
@@ -101,12 +110,12 @@ node *del(node *head, int num)
     printf("\ndelete the first node which the num = %d\n", num);
     if (p1->data != num)
     {
-        printf("%d could be found\n", num);
+        printf("%d could not be found\n", num);
     }else
     {
-       if (p1 == head)
+       if (p1 == head->next)
        {
-            head = p1->next;
+            head->next = p1->next;
        }else
        {
             p2->next = p1->next;
@@ -129,7 +138,7 @@ node*   insert(node *head, int num)
    s = (node*)malloc(sizeof(node));
    s->data = num;
 
-   p1 = head;
+   p1 = head->next;
    while(p1->data < s->data && p1->next != NULL)
    {
         p2 = p1;
@@ -137,10 +146,10 @@ node*   insert(node *head, int num)
    }
 
    //在链表头部插入节点
-   if (p1 == head)
+   if (p1 == head->next)
    {
         s->next = p1;
-        head = s;
+        head->next = s;
         return head;
    }
 
@@ -182,7 +191,7 @@ node* sort(node* head)
 
     for (j = 1; j < n; j++)
     {
-        p = head;
+        p = head->next;
         for(i = 0; i < n-j; i++)
         {
             if (p->data > p->next->data)
@@ -212,9 +221,10 @@ node * reverse(node* head)
     if (head == NULL || head->next == NULL)
       return head;
 
-    p1 = head;
+    p1 = head->next;
     p2 = p1->next;
 
+    p1->next = NULL;
     while(p2)
     {
         p3 = p2->next;
@@ -222,8 +232,7 @@ node * reverse(node* head)
         p1 = p2;
         p2 = p3;
     }
-    head->next = NULL;
-    head = p1;
+    head->next = p1;
 
     return head;
 }
