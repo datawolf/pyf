@@ -78,7 +78,7 @@ void print(node *head)
     int  n;
 
     n = length(head);
-    p = head->next;;
+    p = head->next;
 
     printf("\nNow, These %d records are : \n", n);
 
@@ -100,6 +100,9 @@ node *del(node *head, int num)
 {
     node *p1, *p2;
     p1 = head->next;
+
+    if (head == NULL || head->next == NULL)
+      return head;
 
     while (p1->data != num && p1->next != NULL)
     {
@@ -139,6 +142,13 @@ node*   insert(node *head, int num)
    s->data = num;
 
    p1 = head->next;
+   if (p1 == NULL)
+   {
+        s->next = NULL;
+        head->next = s;
+        return head;
+   }
+
    while(p1->data < s->data && p1->next != NULL)
    {
         p2 = p1;
@@ -236,6 +246,34 @@ node * reverse(node* head)
 
     return head;
 }
+
+/**
+ * 寻找单链表的中心节点
+ *
+ */
+void searchmid(node* head, node *mid)
+{
+    node *temp = head->next;
+
+    if (head == NULL || head->next == NULL)
+    {
+        mid = NULL;
+        return;
+    }
+    if (head->next->next == NULL)
+    {
+        mid = head->next;
+        return;
+    }
+      
+    while (head->next->next != NULL)
+    {
+        head = head->next->next;
+        temp = temp->next;
+        mid = temp;
+    }
+}
+
 
 int main( int argc, char **argv)
 {
