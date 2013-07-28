@@ -197,6 +197,37 @@ node* sort(node* head)
 
     return head;
 }
+
+
+/**
+ *
+ *
+ * 单链表的逆置
+ *
+ */
+node * reverse(node* head)
+{
+    node *p1, *p2, *p3;
+
+    if (head == NULL || head->next == NULL)
+      return head;
+
+    p1 = head;
+    p2 = p1->next;
+
+    while(p2)
+    {
+        p3 = p2->next;
+        p2->next = p1;
+        p1 = p2;
+        p2 = p3;
+    }
+    head->next = NULL;
+    head = p1;
+
+    return head;
+}
+
 int main( int argc, char **argv)
 {
     node *head;
@@ -208,6 +239,8 @@ int main( int argc, char **argv)
     head = insert(head, 5);
     print(head);
     head = sort(head);
+    print(head);
+    head = reverse(head);
     print(head);
 
     return 0;
