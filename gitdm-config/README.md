@@ -51,13 +51,13 @@
 
 # 分析步骤 #
 ## 1 获取邮件别名 ##
-修改`get-email-aliases.sh`中的shell变量GIT和PROJECTS，使GIT指向所要分析代码的目录，PROJECTS
+修改`get-email-aliases.sh`中的shell变量`GIT`和`PROJECTS`，使`GIT`指向所要分析代码的目录，`PROJECTS`
 为所要分析的项目名称。然后运行如下命令：
 
     get-email-aliases.sh
 
 得到文件`aliases`，将其拷贝到`foo-config`文件夹中。
-	cp aliases	foo-config
+    cp aliases	foo-config
 
 ## 2 拷贝配置文件到所要分析的目录 ##
 
