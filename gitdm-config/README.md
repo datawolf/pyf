@@ -36,9 +36,9 @@
 运行如下命令，得到`emails.txt`
 
     get-email-address.sh
-	sed 's/ /\n/' < aliases >> tmp
-	sed 's/ /\n/' < other-aliases >> tmp
- 	(sort | uniq | grep -v '\((none)\|\.local\)$') < tmp > emails.txt
+    sed 's/ /\n/' < aliases >> tmp
+    sed 's/ /\n/' < other-aliases >> tmp
+    (sort | uniq | grep -v '\((none)\|\.local\)$') < tmp > emails.txt
 
 ### 3 根据`emails.txt`中的邮箱，得到`launchpad`中的名称 ###
 	python launchpad/map-email-to-lp-name.py $(cat emails.txt) > launchpad-ids.txt
@@ -57,15 +57,16 @@
     get-email-aliases.sh
 
 得到文件`aliases`，将其拷贝到`foo-config`文件夹中。
+
     cp aliases	foo-config
 
 ## 2 拷贝配置文件到所要分析的目录 ##
 
-	cp -r foo-config  $DEST/
-	cp  gitdm.config  $DEST/
+    cp -r foo-config  $DEST/
+    cp  gitdm.config  $DEST/
 ## 3 运行 gitdm 命令分析##
 
-	git log -p -M | gitdm -u -x  output.cvs
+    git log -p -M | gitdm -u -x  output.cvs
 
 
 ## 注意 ##
