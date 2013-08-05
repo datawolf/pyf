@@ -12,3 +12,6 @@ Programming Your Future!
 
 ## audition ##
 关于面试相关的复习代码
+
+## gitdm-config ##
+关于gitdm的配置文件说明
