@@ -16,6 +16,7 @@ Programming Your Future!
 ## gitdm-config ##
 关于gitdm的配置文件说明
 
-
+## pyqt4-tutorials
+对pyqt4的学习代码
 
 @datawolf
