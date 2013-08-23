@@ -1,0 +1,44 @@
+#include <sys/times.h>
+#include <stdio.h>
+
+#include "type.h"
+#define NUM 1000
+
+double interval(struct tms *t1, struct tms *t2)
+{
+    return ( t2->tms_utime + t2->tms_stime - t1->tms_utime - t1->tms_stime);
+}
+
+struct tms t1, t2;
+clock_t start, end;
+int main(int argc, char **argv)
+{
+    element list[NUM];
+
+    int i;
+    for ( i = 0; i < NUM; i++)
+        list[i].key = NUM - i;
+
+    start =  times(&t1);
+    insertion_sort(list, 10);
+    end = times(&t2);
+    printf("n = 10, clock_times =  %7.2f\n", end-start);
+
+    start =  times(&t1);
+    insertion_sort(list, 20);
+    end = times(&t2);
+    printf("n = 20, clock_times =  %7.2f\n", end-start);
+
+    start =  times(&t1);
+    insertion_sort(list, 90);
+    sleep(2);
+    end = times(&t2);
+    printf("n = 90, clock_times =  %7.2f\n", end-start);
+
+
+    start =  times(&t1);
+    insertion_sort(list, 200);
+    end = times(&t2);
+    printf("n = 200, clock_times =  %7.2f\n", end-start);
+
+}
