@@ -15,17 +15,17 @@ int main(int argc, char **argv)
 {
     element list[NUM];
     double duration;
-    int i,j;
+    int i;
+    for ( i = 0; i < NUM; i++)
+        list[i].key = NUM - i;
 
-    for (i = 0; i < 25; i++)
+    for (i = 0; i < 19; i++)
     {
-        
-        for ( j = 0; j  < num[i]; j++)
-            list[j].key = num[i] - j;
+        permute(list, num[i]);
         gettimeofday(&tv, &tz);
         start_sec = tv.tv_sec;
         start_usec = tv.tv_usec;
-        insertion_sort(list, num[i]);
+        merge_sort(list, num[i]);
         gettimeofday(&tv, &tz);
         end_sec = tv.tv_sec;
         end_usec = tv.tv_usec;
