@@ -1,0 +1,67 @@
+digraph hlist {
+
+graph [
+rankdir = "LR"
+style = "dotted"
+];
+
+node [
+fontsize = "16"
+shape = "ellipse"
+];
+
+edge [
+];
+
+label="哈希链表";
+
+subgraph clusterA {
+label = "哈希表"
+"node0" [
+label = "<f0> ...| <f1> hlist_head | <f2> ... | <f3> ..."
+shape = "record"
+];
+}
+
+subgraph clusterB {
+label = "hlist_node"
+"node1" [
+label = "<f0> next| <f1> prev "
+shape = "record"
+];
+}
+
+subgraph clusterC {
+label = "hlist_node"
+"node2" [
+label = "<f0> next| <f1> prev "
+shape = "record"
+];
+}
+
+subgraph clusterD {
+label = "hlist_node"
+"node3" [
+label = "<f0> next| <f1> prev "
+shape = "record"
+];
+}
+
+
+"node0":f1 -> "node1":f0 [
+id = 0
+];
+"node1":f0 -> "node2":f0 [
+id = 1
+];
+"node2":f0 -> "node3":f0 [
+id = 2
+];
+"node2":f1 -> "node1":f1 [
+id = 3
+];
+"node3":f1 -> "node2":f1 [
+id = 3
+];
+
+}
