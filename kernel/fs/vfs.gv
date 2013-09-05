@@ -1,0 +1,58 @@
+digraph hlist {
+
+graph [
+rankdir = "LR"
+];
+
+node [
+fontsize = "11"
+shape = "ellipse"
+];
+
+edge [
+];
+
+label="虚拟文件系统(VFS)";
+
+"task_struct" [
+label = "<task_struct> [task_struct] | ... | <namespace> namespace| ... |<fs> fs | ... |<files> files | <f3> ..."
+shape = "record"
+];
+
+"fs_struct" [
+label = "<fs_struct> [fs_struct] |users|lock|seq|umask|in_exec|<root> struct path root| <pwd>  struct path pwd"
+shape = "record"
+];
+
+"files_struct" [
+label = "<files_struct> [files_struct]|count| fdt | fdtab | file_lock | next_fd | ... |<fd_array> struct file fd_array[]  "
+shape = "record"
+];
+
+"root_path" [
+label = "<path> [path] |struct vfsmount *mnt | struct dentry *dentry" 
+shape = "record"
+];
+
+"pwd_path" [
+label = "<path> [path] |struct vfsmount *mnt | struct dentry *dentry" 
+shape = "record"
+];
+
+"file_system_type" [
+label = "<file_system_type> [file_system_type] | name| fs_flags|...| next | <fs_supers> struct hlist_head fs_supers| ... "    
+shape = "record"
+];
+
+"super_block" [
+label = "<super_block> [super_block] | s_list | ... | <type> s_type| s_files |s_mounts| ..."
+shape = "record"
+];
+
+"task_struct":fs -> "fs_struct":fs_struct;
+"task_struct":files -> "files_struct":files_struct;
+"fs_struct":root -> "root_path":path;
+"fs_struct":pwd -> "pwd_path":path;
+"file_system_type":fs_supers -> "super_block":super_block;
+"super_block":type -> "file_system_type":file_system_type;
+}
