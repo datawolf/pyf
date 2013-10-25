@@ -11,5 +11,6 @@ all: $(objects)
 	
 .PHONY: clean
 clean:
+	@echo "Delete files"
 	$(RM) *.o
 
