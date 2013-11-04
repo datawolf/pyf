@@ -7,6 +7,7 @@
 #include <string.h>
 
 
+
 typedef     struct double_list_node
 {
     struct double_list_node *next;
