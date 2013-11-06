@@ -1,29 +1,29 @@
 #  Makefile for nasm program
-#
-#
 all:sample sumprog adddigits addition toupper
 
+NASM_FLAGS=-f elf
+LD_FLAGS=
 sample: io.o sample.o
-	ld -s -o $@  $^
+	ld $(LD_FLAGS) -o $@  $^
 sumprog: io.o sumprog.o
-	ld -s -o $@  $^
+	ld $(LD_FLAGS) -o $@  $^
 adddigits: io.o adddigits.o
-	ld -s -o $@  $^
+	ld $(LD_FLAGS) -o $@  $^
 toupper: io.o toupper.o
-	ld -s -o $@  $^
+	ld $(LD_FLAGS) -o $@  $^
 addition: io.o addition.o
-	ld -s -o $@  $^
+	ld $(LD_FLAGS) -o $@  $^
 
 sample.o: sample.asm
-	nasm -f elf $<
+	nasm  $(NASM_FLAGS) $<
 toupper.o: toupper.asm
-	nasm -f elf $<
+	nasm  $(NASM_FLAGS) $<
 addition.o: addition.asm
-	nasm -f elf $<
+	nasm  $(NASM_FLAGS) $<
 sumprog.o: sumprog.asm
-	nasm -f elf  $<
+	nasm  $(NASM_FLAGS)  $<
 adddigits.o: adddigits.asm
-	nasm -f elf  $<
+	nasm  $(NASM_FLAGS) $<
 .PHONY: clean
 
 clean:
