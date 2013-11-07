@@ -16,7 +16,7 @@ sum_msg             db  "The sum is: ",0
     mov         ECX,10          ; loop count = 10
     sub         EAX,EAX         ; sum = 0
 read_loop:
-    GetLIint    EDX             ; read the input number
+    GetLInt     EDX             ; read the input number
     cmp         EDX,0           ; is it zero?
     je          reading_done    ; if yes, stop reading input
     add         EAX,EDX
