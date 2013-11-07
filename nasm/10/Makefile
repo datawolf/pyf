@@ -1,5 +1,5 @@
 #  Makefile for nasm program
-all:binchar
+all:binchar hex1char
 
 ARCH=$(shell uname -m)
 
@@ -19,7 +19,15 @@ binchar.o: binchar.asm
 	nasm  $(NASM_FLAGS) $<
 
 
+hex1char: io.o hex1char.o
+	ld $(LD_FLAGS) -o $@  $^
+
+hex1char.o: hex1char.asm
+	nasm  $(NASM_FLAGS) $<
+
+
+
 .PHONY: clean
 
 clean:
-	$(RM) binchar binchar.o 
+	$(RM) binchar binchar.o  hex1char hex1char.o
