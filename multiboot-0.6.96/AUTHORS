@@ -1,0 +1,13 @@
+
+Bryan Ford and Erich Stefan Boleyn wrote the initial version of the Multiboot
+specification.
+
+The following authors assigned copyright on their work to the Free
+Software Foundation:
+
+In year 1999, Kunihiro Ishiguro provided the first version that would be
+imported into GNU GRUB.
+
+Yoshinori K. Okuji maintained it during the 1999-2006 period.
+
+In year 2000, Per Lundberg added graphics support.

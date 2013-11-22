@@ -1,0 +1,500 @@
+2010-11-13  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* doc/multiboot.texi (BIOS drive): Replace ambigious "first" byte with
+	"most significant" byte.
+	Reported by: Mike Kasick.
+
+2010-10-22  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* doc/Makefile.am (kernel_LDFLAGS): Add -m32.
+	(kernel_CFLAGS): Changed from this ...
+	(kernel_CPPFLAGS): ... to this.
+
+2010-10-22  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* doc/multiboot.h (multiboot_apm_info): Use multiboot and not GRUB
+	integer types.
+
+2010-09-20  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* doc/multiboot.h: Stylistic improvements. Add APM declarations.
+
+2010-09-20  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* doc/multiboot.texi: Add new memory type for badram.
+
+2010-09-13  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* doc/multiboot.texi: Clarify command line format.
+
+2010-09-03  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	Reimport mbchk.
+
+	* util/Makefile.am: New file.
+	* util/mbchk.c: Likewise.
+	* Makefile.am (SUBDIRS): Add util.
+	* configure.ac: New options --enable-mbchk. Check for HELP2MAN.
+	(CFLAGS): Don't alter.
+	(COND_MAN_PAGES): New conditional.
+	(AC_CONFIG_FILES): Add util/Makefile.
+	* doc/Makefile.am (kernel_CFLAGS): Add -m32 and -nostdlib.
+	* doc/multiboot.texi (Invoking mbchk): New chapter.
+
+2010-03-14  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* doc/kernel.c (cmain): Use padding to properly display 64-bit
+	quantities.
+	(printf): Add padding support.
+	Reported by: Soeren D. Schulze.
+
+2010-02-09  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* doc/multiboot.texi: Fix a typo.
+	Reported by: Trond
+
+2010-01-20  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* doc/multiboot.texi: Define NVS and ACPI memory types.
+	* doc/multiboot.h (MULTIBOOT_MEMORY_ACPI_RECLAIMABLE): New definition.
+	(MULTIBOOT_MEMORY_NVS): Likewise.
+
+2010-01-15  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* doc/boot.S: Slight adjustment to make makeinfo happy.
+	* doc/kernel.c: Likewise.
+
+2010-01-15  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* doc/kernel.c (cmain): Handle EGA text video information.
+	* doc/multiboot.h (MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT): New const.
+
+2010-01-14  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* COPYING: Replace with GPLv3 text.
+	* doc/boot.S: Update to GPL version 3 or later.
+	* doc/kernel.c: Likewise.
+
+2010-01-12  Vladimir Serbinenko  <phcoder@gmail.com>
+2010-01-12  Robert Millan  <rmh.grub@aybabtu.com>
+
+	Video mode amendment by Vladimir Serbinenko.  See NEWS file for
+	details.
+
+	* NEWS: Document video mode amendment.
+	* doc/multiboot.texi: Video mode ammendment.
+	* doc/multiboot.h (MULTIBOOT_INFO_VIDEO_INFO): Remove macro.
+	(MULTIBOOT_INFO_VBE_INFO, MULTIBOOT_INFO_FRAMEBUFFER_INFO): New macros.
+	(multiboot_uint8_t): New type.
+	(struct multiboot_color): New structure.
+	(struct multiboot_info): Add new video mode fields.
+	(MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED)
+	(MULTIBOOT_FRAMEBUFFER_TYPE_RGB): New macros.
+
+	* doc/boot.S (MULTIBOOT_HEADER_FLAGS): Add `MULTIBOOT_VIDEO_MODE'.
+	(multiboot_header): Include video mode information.
+	* doc/kernel.c (cmain): Draw a blue diagonal line when video mode
+	information is provided.
+
+2010-01-07  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* doc/multiboot.h (MULTIBOOT_UNSUPPORTED): Remove macro (moved to
+	GRUB).
+
+2010-01-03  Robert Millan  <rmh.grub@aybabtu.com>
+
+	Install multiboot.h system-wide.
+
+	* doc/Makefile.am (pkginclude_HEADERS): New variable.
+
+2010-01-03  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* doc/boot.S (MULTIBOOT_HEADER_FLAGS): Redefine using macros.
+
+2010-01-03  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* Makefile.am (web-manual): Add `all' as dependency.
+
+2010-01-02  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* doc/kernel.c (cmain): Add missing cast.
+
+2010-01-01  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* autogen.sh: Use `gnulib-tool' to install gendocs.sh.
+	* Makefile.am (web-manual): New target.  Builds a web manual using
+	gendocs.sh.
+	* configure.ac (AC_PREREQ): Require Autoconf 2.59 or later.
+
+2010-01-01  Robert Millan  <rmh.grub@aybabtu.com>
+
+	Use more standard `doc' directory.
+
+	* docs: Rename to ...
+	* doc: ... this.  Update all users.
+
+	* doc/multiboot.texi: Fix an obsolete reference to `docs' directory
+	in GRUB distribution.
+
+2010-01-01  Robert Millan  <rmh.grub@aybabtu.com>
+
+	Make ia32 libc unnecessary on amd64.
+
+	* configure.ac (CFLAGS): Move down after the basic gcc tests are
+	done.  Add `-nostdlib'.
+
+2009-12-24  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* configure.ac: Bump version to 0.6.96.
+	* docs/multiboot.texi: Include `version.texi' instead of hardcoding
+	version number.
+
+2009-12-24  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* docs/Makefile.am (EXTRA_DIST): Remove `menu.lst'.
+
+2009-12-24  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* autogen.sh: Workaround Automake requirement for NEWS and README.
+	We really should have them, but in practice we never had.  This
+	ought not be considered a regression.
+
+2009-12-24  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* BUGS: Remove.
+	* INSTALL: Remove.
+	* NEWS: Remove.
+	* README: Remove.
+	* autogen.sh: Adjust automake flags to add generic files such
+	as `INSTALL', `depcomp', `install-sh' and `missing'.
+
+2009-12-24  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* docs/multiboot.texi: Bump version number to 0.6.96.
+
+2009-12-24  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* docs/multiboot.texi: Misc editorial changes:
+
+	Avoid using `commercial' as a synonym for `non-free'
+	(see http://www.gnu.org/philosophy/words-to-avoid.html#Commercial).
+
+	Make a clear distinction between kernels and Operating Systems
+	(Linux is a kernel, FreeBSD and NetBSD are Operating Systems, Mach
+	is a microkernel, VSTa is something in-between).
+
+	Use 64-bit types to describe 64-bit datum (instead of splitting in
+	two 32-bit fields).  Little endianess assumption applies (as per
+	Terminology section).
+
+	Update status of GNU GRUB relative to version 2.
+
+2009-12-24  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* docs/multiboot.h: Replace with include/multiboot.h from GRUB 2 Bazaar
+	trunk.
+	* docs/kernel.c (cmain): Update name references for new multiboot.h
+	header.
+
+2009-12-24  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* docs/multiboot.h (MULTIBOOT_HEADER_FLAGS): Moved from here ...
+	* docs/boot.S (MULTIBOOT_HEADER_FLAGS): ... to here.
+
+2009-12-24  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* docs/boot.S (ASM): Rename to ...
+	(ASM_FILE): ... this.
+	* docs/multiboot.h: Check for `ASM_FILE' instead of `ASM'.
+
+	* docs/multiboot.h (EXT_C, STACK_SIZE): Moved from here ...
+	* docs/boot.S (EXT_C, STACK_SIZE): ... to here.
+
+2009-12-13  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* docs/fdl.texi: Remove. It's not used.
+
+2009-12-13  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	Prevent generation of .note.gnu.build-id which drastically increases
+	memory requirements of example kernel.
+
+	* docs/Makefile.am (kernel_LDFLAGS): Add '-Wl,--build-id=none'.
+
+2009-12-13  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* BUGS: New file.
+
+2009-12-13  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* docs/kernel.c.texi: Removed. It's autogenerated.
+	* docs/multiboot.h.texi: Likewise.
+	* docs/version.texi: Likewise.
+
+2009-12-13  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* docs/Makefile.am: Remove HELP2MAN.
+	* docs/help2man: Remove.
+
+2009-12-13  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* configure.ac: Remove non-multiboot stuff.
+
+2009-12-13  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* NEWS: Emptied. It contained no multiboot information.
+	* README: Likewise.
+
+2009-12-13  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* ChangeLog: Remove non-multiboot entries.
+
+2009-11-13  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* autogen.sh: New file.
+
+2009-11-13  Robert Millan  <rmh.grub@aybabtu.com>
+
+	Remove everything not related to Multiboot.  A huge number of files
+	was removed (too many to list them here).  The following files were
+	modified:
+
+	* AUTHORS: Remove GRUB-specific bits.
+	* Makefile.am: Likewise.
+	* autogen.sh: Likewise.
+	* configure.ac: Likewise.
+	* docs/Makefile.am: Likewise.
+
+2009-07-02  Pavel Roskin  <proski@gnu.org>
+
+	* docs/boot.S: Fix missing newline at the end.
+	* docs/boot.S.texi: Regenerate.
+
+2008-09-03  Felix Zielcke  <fzielcke@z-51.de>
+
+	Based on patch from Ville Skyttä <ville.skytta@iki.fi>
+	* docs/multiboot.texi: Fix some spelling.
+
+2008-04-10  Pavel Roskin  <proski@gnu.org>
+
+	* configure.ac: Always use "_cv_" in cache variables for
+	compatibility with Autoconf 2.62.
+
+2007-10-29  Pavel Roskin  <proski@gnu.org>
+
+	* configure.ac: Test if '--build-id=none' is supported by the
+	linker and add it to LDFLAGS if possible.  Build ID causes
+	objcopy to generate huge binary files.
+
+2006-06-24  Yoshinori K. Okuji  <okuji@enbug.org>
+
+	* docs/multiboot.texi: Reformatted to show the license term
+	and the version number explicitly.
+
+2006-04-16  Yoshinori K. Okuji  <okuji@enbug.org>
+
+	* docs/multiboot.texi: Correct the offset of address
+	fields. Reported by Jeroen Dekkers.
+
+2005-09-29  Yoshinori K. Okuji  <okuji@enbug.org>
+
+	* docs/multiboot.texi: Fix a bug in the byte order of
+	boot_device. I hope this won't affect any OS image.
+	Increased the version number to 0.6.94.
+
+2004-10-11 Jason Thomas <jason@staff.pnc.com.au>
+
+	Patch from Stefanus Du Toit  <sjdutoit@uwaterloo.ca>
+	* docs/kernel.c.texi (cmain): Incremement mod by one, instead of
+	sizeof(module_t), since it's already a pointer of type module_t.
+	* docs/kernel.c (cmain): Do the same.
+
+2004-04-22  Jeroen Dekkers  <jeroen@dekkers.cx>
+
+	* Makefile.am (AUTOMAKE_OPTIONS): Add "gnu".
+	* configure.ac: Update to work with automake 1.8, quote all
+	AC_DEFUN's correctly and provide descriptions for AC_DEFINE's.
+
+2003-10-19  Yoshinori K. Okuji  <okuji@enbug.org>
+
+	Migrated to newer autotools.
+
+	* configure.in: Removed.
+	* configure.ac: New file. Mostly derived from configure.in.
+
+2002-07-01  Yoshinori K. Okuji <okuji@enbug.org>
+
+	* Makefile.am (AUTOMAKE_OPTIONS): New variable. Specify the
+	required Automake version explicitly.
+
+2002-05-23  Yoshinori K. Okuji  <okuji@enbug.org>
+
+	Define the behavior of the boot loader when the load end address
+	and the bss end address are zero in the Multiboot Specification,
+	and add the support into GRUB. I've modified a patch from Yuri
+	Zaporogets <yuriz@ukr.net>.
+
+	* docs/multiboot.texi (The address fields of Multiboot header):
+	Added descriptions about the behavior of the boot loader when
+	LOAD_END_ADDR is zero and BSS_END_ADDR is zero.
+
+2001-03-03  OKUJI Yoshinori  <okuji@gnu.org>
+
+	* docs/multiboot.texi (History): Written.
+
+2001-01-27  OKUJI Yoshinori  <okuji@gnu.org>
+
+	* docs/multiboot.texi: Start reorganizing Multiboot
+	Specification.
+
+2001-01-12  OKUJI Yoshinori  <okuji@gnu.org>
+
+	* docs/multiboot.h [__ELF__] (MULTIBOOT_HEADER_FLAGS): Defined
+	as 0x00000003 instead of 0x00010003.
+	* docs/boot.S (multiboot_header) [__ELF__]: Don't define a.out
+	kludge information.
+
+	* docs/Makefile.am (EXTRA_PROGRAMS): New variable.
+	[BUILD_EXAMPLE_KERNEL] (noinst_DATA): Removed.
+	[BUILD_EXAMPLE_KERNEL] (noinst_PROGRAMS): Changed to kernel.
+	[BUILD_EXAMPLE_KERNEL] (kernel_exec_SOURCES): Renamed to ...
+	[BUILD_EXAMPLE_KERNEL] (kernel_SOURCES): ... this.
+	[BUILD_EXAMPLE_KERNEL] (kernel_exec_CFLAGS): Renamed to ...
+	[BUILD_EXAMPLE_KERNEL] (kernel_CFLAGS): ... this.
+	[BUILD_EXAMPLE_KERNEL] (kernel_exec_LDFLAGS): Renamed to ...
+	[BUILD_EXAMPLE_KERNEL] (kernel_LDFLAGS): ... this.
+	[BUILD_EXAMPLE_KERNEL] (kernel): Removed.
+	[BUILD_EXAMPLE_KERNEL] (boot.o): New dependency.
+	(CLEANFILES): New variable.
+
+2001-01-11  OKUJI Yoshinori  <okuji@gnu.org>
+
+	* docs/Makefile.am [BUILD_EXAMPLE_KERNEL] (noinst_DATA): New
+	variable.
+	[BUILD_EXAMPLE_KERNEL] (noinst_PROGRAMS): Likewise.
+	[BUILD_EXAMPLE_KERNEL] (kernel_exec_SOURCES): Likewise.
+	[BUILD_EXAMPLE_KERNEL] (kernel_exec_CFLAGS): Likewise.
+	[BUILD_EXAMPLE_KERNEL] (kernel_exec_LDFLAGS): Likewise.
+	[BUILD_EXAMPLE_KERNEL] (kernel): New target.
+	* configure.in (--enable-example-kernel): New option.
+
+	* docs/kernel.c (cmain): Cast unsigned long variables to
+	unsigned explicitly, to suppress GCC warnings.
+
+2000-10-23  OKUJI Yoshinori  <okuji@gnu.org>
+
+	* docs/multiboot.texi: Upgraded to 0.6.92.
+	(Boot information format): Re-designed the graphics table.
+
+2000-10-20  OKUJI Yoshinori  <okuji@gnu.org>
+
+	APM BIOS table support is added, based on a patch by Matt Yourst
+	<yourst@mit.edu>.
+
+	* docs/multiboot.texi (Boot information format): Added the
+	definition of APM table format.
+
+2000-10-16  OKUJI Yoshinori  <okuji@gnu.org>
+
+	Some of the new Multiboot features are supported. APM support
+	and VESA support are not strictly defined or implemented yet.
+
+	* docs/multiboot.texi (Top): Increase the version number.
+	(Boot information format): Changed the drive information format,
+	because it was not straightforward.
+
+2000-02-11  OKUJI Yoshinori  <okuji@gnu.org>
+
+	From Per Lundberg <plundis@byggdok.se>:
+	* docs/multiboot.texi: Added graphics support.
+
+2000-02-10  OKUJI Yoshinori  <okuji@gnu.org>
+
+	* docs/multiboot.texi (Top): Downgrade the version to 0.6.90,
+	since we need more work to release it as 0.7.
+
+2000-01-03  OKUJI Yoshinori  <okuji@gnu.org>
+
+	* docs/multiboot.texi (Boot information format): Added the
+	descriptions about the fields "config_table" and
+	"boot_loader_name".
+
+1999-12-31  OKUJI Yoshinori  <okuji@gnu.org>
+
+	* docs/src2texi: Added an extra space into the first line, for
+	the portability issue.
+
+1999-11-05  OKUJI Yoshinori  <okuji@kuicr.kyoto-u.ac.jp>
+
+	* docs/multiboot.texi (Boot information format): Add the members
+	`drives_addr' and `drives_count' into the Multiboot information
+	structure, and added the descriptions.
+
+1999-10-27  OKUJI Yoshinori  <okuji@kuicr.kyoto-u.ac.jp>
+
+	* docs/help2man: Upgraded to 1.016.
+
+1999-10-20  OKUJI Yoshinori  <okuji@kuicr.kyoto-u.ac.jp>
+
+	* docs/Makefile.am (%.c.texi): Use $(SHELL) instead of /bin/sh.
+	(%.h.texi): Likewise.
+	(%.S.texi): Likewise.
+
+1999-10-17  OKUJI Yoshinori  <okuji@kuicr.kyoto-u.ac.jp>
+
+	* docs/Makefile.am (.texi): Canceled because the dependecies can
+	be circulated.
+
+1999-10-16  OKUJI Yoshinori  <okuji@kuicr.kyoto-u.ac.jp>
+
+	* docs/multiboot.texi: Include the example source files of a
+	Multiboot kernel.
+	* docs/src2texi: New file.
+	* docs/boot.S: Likewise.
+	* docs/multiboot.h: Likewise.
+	* docs/kernel.c: Likewise.
+	* docs/boot.S.texi: Likewise.
+	* docs/multiboot.h.texi: Likewise.
+	* docs/kernel.c.texi: Likewise.
+	* docs/Makefile.am (EXAMPLES): New varilable.
+	(multiboot_TEXINFOS): Likewise.
+	(SRC2TEXI): Likewise.
+	(noinst_SCRIPTS): Added $(SRC2TEXI).
+	(EXTRA_DIST): Added $(EXAMPLES) and $(multiboot_TEXINFOS).
+	(%.c.texi): New target.
+	(%.h.texi): Likewise.
+	(%.S.texi): Likewise.
+
+1999-09-13  OKUJI Yoshinori  <okuji@kuicr.kyoto-u.ac.jp>
+
+	* configure.in (--enable-maintainer-mode): Do not use our own
+	rule, but use AM_MAINTAINER_MODE instead. If the maintainer mode
+	is enabled, then check for perl, and if it is not found, print
+	an error message and abort.
+	* docs/Makefile.am (grub.8): Regenerated if MAINTAINER_MODE is
+	defined, instead of GRUB_MAINT. Use the variable PERL rather
+	than running help2man directly.
+
+1999-06-21  OKUJI Yoshinori  <okuji@kuicr.kyoto-u.ac.jp>
+
+	* docs/Makefile.am (html): Deleted.
+	(txt): Likewise.
+	(EXTRA_DIST): $(txt) and $(html) are removed.
+	* docs/boot-proposal.html: Removed.
+	* docs/errors.html: Likewise.
+	* docs/faq.html: Likewise.
+	* docs/grub.html: Likewise.
+	* docs/install.html: Likewise.
+	* docs/mem64mb.html: Likewise.
+	* docs/technical.html: Likewise.
+	* docs/using.html: Likewise.
+	* docs/PC_partitioning.txt: Likewise.
+	* docs/bios_mapping.txt: Likewise.
+	* docs/commands.txt: Likewise.
+	* docs/embedded_data.txt: Likewise.
+	* docs/filesystem.txt: Likewise.
+
+1999-05-14  OKUJI Yoshinori  <okuji@kuicr.kyoto-u.ac.jp>
+
+	* docs/Makefile.am (info_TEXINFOS): Added multiboot.texi.
+	* docs/multiboot.texi: New file. From Kunihiro Ishiguro.
