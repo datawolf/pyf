@@ -1,0 +1,439 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>chapter16 &#36923;&#36753;&#21644;&#20301;&#25805;&#20316;</title>
+<style type="text/css">
+    li { list-style: none;  margin: 0; }
+    p { margin: 0; }
+    span.foldopened { color: white; font-size: xx-small;
+    border-width: 1; font-family: monospace; padding: 0em 0.25em 0em 0.25em; background: #e0e0e0;
+    VISIBILITY: visible;
+    cursor:pointer; }
+
+
+    span.foldclosed { color: #666666; font-size: xx-small;
+    border-width: 1; font-family: monospace; padding: 0em 0.25em 0em 0.25em; background: #e0e0e0;
+    VISIBILITY: hidden;
+    cursor:pointer; }
+
+    span.foldspecial { color: #666666; font-size: xx-small; border-style: none solid solid none;
+    border-color: #CCCCCC; border-width: 1; font-family: sans-serif; padding: 0em 0.1em 0em 0.1em; background: #e0e0e0;
+    cursor:pointer; }
+
+    span.l { color: red; font-weight: bold; }
+
+    a.mapnode:link {text-decoration: none; color: black; }
+    a.mapnode:visited {text-decoration: none; color: black; }
+    a.mapnode:active {text-decoration: none; color: black; }
+    a.mapnode:hover {text-decoration: none; color: black; background: #eeeee0; }
+
+</style>
+<!-- ^ Position is not set to relative / absolute here because of Mozilla -->
+</head>
+<body>
+
+<script type="text/javascript">
+   // Here we implement folding. It works fine with MSIE5.5, MSIE6.0 and
+   // Mozilla 0.9.6.
+
+   if (document.layers) {
+      //Netscape 4 specific code
+      pre = 'document.';
+      post = ''; }
+   if (document.getElementById) {
+      //Netscape 6 specific code
+      pre = 'document.getElementById("';
+      post = '").style'; }
+   if (document.all) {
+      //IE4+ specific code
+      pre = 'document.all.';
+      post = '.style'; }
+
+function layer_exists(layer) {
+   try {
+      eval(pre + layer + post);
+      return true; }
+   catch (error) {
+      return false; }}
+
+function show_layer(layer) {
+   eval(pre + layer + post).position = 'relative'; 
+   eval(pre + layer + post).visibility = 'visible'; }
+
+function hide_layer(layer) {
+   eval(pre + layer + post).visibility = 'hidden';
+   eval(pre + layer + post).position = 'absolute'; }
+
+function hide_folder(folder) {
+    hide_folding_layer(folder)
+    show_layer('show'+folder);
+
+    scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+}
+
+function show_folder(folder) {
+    // Precondition: all subfolders are folded
+
+    show_layer('hide'+folder);
+    hide_layer('show'+folder);
+    show_layer('fold'+folder);
+
+    scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+
+    var i;
+    for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       show_layer('show'+folder+'_'+i); }
+}
+function show_folder_completely(folder) {
+    // Precondition: all subfolders are folded
+
+    show_layer('hide'+folder);
+    hide_layer('show'+folder);
+    show_layer('fold'+folder);
+
+    scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+
+    var i;
+    for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       show_folder_completely(folder+'_'+i); }
+}
+
+
+
+function hide_folding_layer(folder) {
+   var i;
+   for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       hide_folding_layer(folder+'_'+i); }
+
+   hide_layer('hide'+folder);
+   hide_layer('show'+folder);
+   hide_layer('fold'+folder);
+
+   scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+}
+
+function fold_document() {
+   var i;
+   var folder = '1';
+   for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       hide_folder(folder+'_'+i); }
+}
+
+function unfold_document() {
+   var i;
+   var folder = '1';
+   for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       show_folder_completely(folder+'_'+i); }
+}
+
+</script>
+<SPAN class="foldspecial" onclick="fold_document()">All +</SPAN>
+<SPAN class="foldspecial" onclick="unfold_document()">All -</SPAN>
+<p>chapter16 &#36923;&#36753;&#21644;&#20301;&#25805;&#20316;
+<ul><li>&#36923;&#36753;&#25351;&#20196;
+<ul><li><span style="font-family: SansSerif, sans-serif; font-weight: bold; ">and</span>
+<ul><li><span id="show1_1" class="foldclosed" onClick="show_folder('1_1')" style="POSITION: absolute">+</span> <span id="hide1_1" class="foldopened" onClick="hide_folder('1_1')">-</span>
+&#28165;&#38500;&#26576;&#19968;&#20301;&#25110;&#32773;&#26576;&#20960;&#20301;
+<ul id="fold1_1" style="POSITION: relative; VISIBILITY: visible;"><li>AL = &nbsp;11010110
+
+</li>
+<li>BL &nbsp;= &nbsp;11111100
+
+</li>
+<li>and AL, BL = 11010100
+
+</li>
+<li>&#23558;AL&#26368;&#21491;&#36793;2&#20301;&#28165;&#38500;&#65292;&#21363;&#35774;&#32622;&#20026;0
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_2" class="foldclosed" onClick="show_folder('1_2')" style="POSITION: absolute">+</span> <span id="hide1_2" class="foldopened" onClick="hide_folder('1_2')">-</span>
+&#38548;&#31163;&#26576;&#20123;&#20301;
+<ul id="fold1_2" style="POSITION: relative; VISIBILITY: visible;"><li>and &nbsp;AL, 1
+
+</li>
+<li>jz &nbsp;even_number
+
+</li>
+<li>&#21028;&#26029;AL&#26368;&#21491;&#36793;1&#20301;&#26159;&#21542;&#20026;1
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_3" class="foldclosed" onClick="show_folder('1_3')" style="POSITION: absolute">+</span> <span id="hide1_3" class="foldopened" onClick="hide_folder('1_3')">-</span>
+<span style="font-family: SansSerif, sans-serif; font-weight: bold; ">or</span>
+<ul id="fold1_3" style="POSITION: relative; VISIBILITY: visible;"><li>&#35774;&#32622;&#26576;&#19968;&#20301;&#25110;&#32773;&#26576;&#20960;&#20301;
+<ul><li>AL = 11010110
+
+</li>
+<li>BL = 00000011
+
+</li>
+<li>or AL, BL = 11010111
+
+</li>
+<li>&#23558;AL&#26368;&#21491;&#36793;2&#20301;&#32622;&#20301;&#65292;&#21363;&#35774;&#32622;&#20026;1
+
+</li>
+
+</ul>
+</li>
+<li>&#21098;&#20999;&#21644;&#31896;&#36148;
+<ul><li>and AL,55H ; cut odd bits
+
+</li>
+<li>and BL,0AAH ; &nbsp;cut even bits
+
+</li>
+<li>or &nbsp;AL, BL &nbsp;&nbsp;; paste them together
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_4" class="foldclosed" onClick="show_folder('1_4')" style="POSITION: absolute">+</span> <span id="hide1_4" class="foldopened" onClick="hide_folder('1_4')">-</span>
+<span style="font-family: SansSerif, sans-serif; font-weight: bold; ">not</span>
+<ul id="fold1_4" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_4_1" class="foldclosed" onClick="show_folder('1_4_1')" style="POSITION: absolute">+</span> <span id="hide1_4_1" class="foldopened" onClick="hide_folder('1_4_1')">-</span>
+&#27714;&#34917;&#30721;
+<ul id="fold1_4_1" style="POSITION: relative; VISIBILITY: visible;"><li>not AL
+
+</li>
+<li>inc AL
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_4_2" class="foldclosed" onClick="show_folder('1_4_2')" style="POSITION: absolute">+</span> <span id="hide1_4_2" class="foldopened" onClick="hide_folder('1_4_2')">-</span>
+&#19987;&#38376;&#30340;&#34917;&#30721;&#25351;&#20196;
+<ul id="fold1_4_2" style="POSITION: relative; VISIBILITY: visible;"><li>neg
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_5" class="foldclosed" onClick="show_folder('1_5')" style="POSITION: absolute">+</span> <span id="hide1_5" class="foldopened" onClick="hide_folder('1_5')">-</span>
+<span style="font-family: SansSerif, sans-serif; font-weight: bold; ">xor</span>
+<ul id="fold1_5" style="POSITION: relative; VISIBILITY: visible;"><li>&#32763;&#36716;&#26576;&#19968;&#20301;&#25110;&#32773;&#26576;&#20960;&#20301;
+<ul><li>xor EAX, 0FH
+
+</li>
+<li>&#23558;EAX&#20013;&#20302;4&#20301;&#32763;&#36716;
+
+</li>
+
+</ul>
+</li>
+<li>&#21021;&#22987;&#21270;&#23492;&#23384;&#22120;&#20026;0
+<ul><li>xor EAX, EAX
+
+</li>
+<li>EAX = 0
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_6" class="foldclosed" onClick="show_folder('1_6')" style="POSITION: absolute">+</span> <span id="hide1_6" class="foldopened" onClick="hide_folder('1_6')">-</span>
+<span style="font-family: SansSerif, sans-serif; font-weight: bold; ">test</span>
+<ul id="fold1_6" style="POSITION: relative; VISIBILITY: visible;"><li>&#25191;&#34892;&#36923;&#36753;and&#25805;&#20316;
+
+</li>
+<li>test&#19981;&#25913;&#21464;&#30446;&#26631;&#25805;&#20316;&#25968;&#65292;&#32780;and&#21017;&#25913;&#21464;&#30446;&#26631;&#25805;&#20316;&#25968;
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li>&#31227;&#20301;&#25351;&#20196;
+<ul><li>&#36923;&#36753;&#31227;&#20301;
+<ul><li><span id="show1_7" class="foldclosed" onClick="show_folder('1_7')" style="POSITION: absolute">+</span> <span id="hide1_7" class="foldopened" onClick="hide_folder('1_7')">-</span>
+<span style="font-family: SansSerif, sans-serif; font-weight: bold; ">shl</span>
+<ul id="fold1_7" style="POSITION: relative; VISIBILITY: visible;"><li>doubling a unsigned number
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_8" class="foldclosed" onClick="show_folder('1_8')" style="POSITION: absolute">+</span> <span id="hide1_8" class="foldopened" onClick="hide_folder('1_8')">-</span>
+<span style="font-family: SansSerif, sans-serif; font-weight: bold; ">shr</span>
+<ul id="fold1_8" style="POSITION: relative; VISIBILITY: visible;"><li>halving a unsigned number
+
+</li>
+
+</ul>
+</li>
+<li>&#20197;&#19978;2&#20010;&#25351;&#20196;&#24037;&#20316;&#20110;&#26080;&#31526;&#21495;&#25968;
+
+</li>
+
+</ul>
+</li>
+<li>&#31639;&#25968;&#31227;&#20301;
+<ul><li><span id="show1_9" class="foldclosed" onClick="show_folder('1_9')" style="POSITION: absolute">+</span> <span id="hide1_9" class="foldopened" onClick="hide_folder('1_9')">-</span>
+<span style="font-family: SansSerif, sans-serif; font-weight: bold; ">sar</span>
+<ul id="fold1_9" style="POSITION: relative; VISIBILITY: visible;"><li>halving a signed number
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_10" class="foldclosed" onClick="show_folder('1_10')" style="POSITION: absolute">+</span> <span id="hide1_10" class="foldopened" onClick="hide_folder('1_10')">-</span>
+<span style="font-family: SansSerif, sans-serif; font-weight: bold; ">sal</span>
+<ul id="fold1_10" style="POSITION: relative; VISIBILITY: visible;"><li>doubling a signed number
+
+</li>
+
+</ul>
+</li>
+<li>&#20197;&#19978;2&#20010;&#25351;&#20196;&#24037;&#20316;&#20110;&#26377;&#31526;&#21495;&#25968;
+
+</li>
+
+</ul>
+</li>
+<li>&#21452;&#31227;&#20301;&#25805;&#20316;
+<ul><li><span style="font-family: SansSerif, sans-serif; font-weight: bold; ">shld</span>
+<ul><li>shld dest,src,count
+
+</li>
+
+</ul>
+</li>
+<li><span style="font-family: SansSerif, sans-serif; font-weight: bold; ">shrd</span>
+<ul><li>shrd dest,src,count
+
+</li>
+
+</ul>
+</li>
+<li>dest&#24517;&#39035;&#26159;&#23492;&#23384;&#22120;&#25110;&#32773;&#20869;&#23384;
+
+</li>
+<li>src&#24517;&#39035;&#26159;&#23492;&#23384;&#22120;
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span id="show1_11" class="foldclosed" onClick="show_folder('1_11')" style="POSITION: absolute">+</span> <span id="hide1_11" class="foldopened" onClick="hide_folder('1_11')">-</span>
+&#24490;&#29615;&#31227;&#20301;&#25351;&#20196;
+<ul id="fold1_11" style="POSITION: relative; VISIBILITY: visible;"><li>&#24102;CF&#30340;&#24490;&#29615;&#31227;&#20301;&#25351;&#20196;
+<ul><li><span style="font-family: SansSerif, sans-serif; font-weight: bold; ">rcl</span>
+
+</li>
+<li><span style="font-family: SansSerif, sans-serif; font-weight: bold; ">rcr</span>
+
+</li>
+
+</ul>
+</li>
+<li>&#19981;&#24102;CF&#30340;&#24490;&#29615;&#31227;&#20301;&#25351;&#20196;
+<ul><li><span style="font-family: SansSerif, sans-serif; font-weight: bold; ">ror</span>
+
+</li>
+<li><span style="font-family: SansSerif, sans-serif; font-weight: bold; ">rol</span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li>&#20301;&#25351;&#20196;
+<ul><li>&#20301;&#27979;&#35797;&#21644;&#20462;&#25913;&#25351;&#20196;
+<ul><li><span id="show1_12" class="foldclosed" onClick="show_folder('1_12')" style="POSITION: absolute">+</span> <span id="hide1_12" class="foldopened" onClick="hide_folder('1_12')">-</span>
+<span style="font-family: SansSerif, sans-serif; font-weight: bold; ">bt</span>
+<ul id="fold1_12" style="POSITION: relative; VISIBILITY: visible;"><li>bit test, &#23558;&#36873;&#25321;&#30340;&#20301;&#25335;&#36125;&#21040;CF&#20013;
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_13" class="foldclosed" onClick="show_folder('1_13')" style="POSITION: absolute">+</span> <span id="hide1_13" class="foldopened" onClick="hide_folder('1_13')">-</span>
+<span style="font-family: SansSerif, sans-serif; font-weight: bold; ">bts</span>
+<ul id="fold1_13" style="POSITION: relative; VISIBILITY: visible;"><li>bit test and set, &#23558;&#36873;&#25321;&#30340;&#20301;&#25335;&#36125;&#21040;CF&#20013;&#65292;&#24182;&#23558;&#35813;&#20301;&#35774;&#32622;&#20026;1
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_14" class="foldclosed" onClick="show_folder('1_14')" style="POSITION: absolute">+</span> <span id="hide1_14" class="foldopened" onClick="hide_folder('1_14')">-</span>
+<span style="font-family: SansSerif, sans-serif; font-weight: bold; ">btr</span>
+<ul id="fold1_14" style="POSITION: relative; VISIBILITY: visible;"><li>bit test and reset&#65292;&#23558;&#36873;&#25321;&#30340;&#20301;&#25335;&#36125;&#21040;CF&#20013;&#65292;&#24182;&#23558;&#35813;&#20301;&#35774;&#32622;&#20026;0
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_15" class="foldclosed" onClick="show_folder('1_15')" style="POSITION: absolute">+</span> <span id="hide1_15" class="foldopened" onClick="hide_folder('1_15')">-</span>
+<span style="font-family: SansSerif, sans-serif; font-weight: bold; ">btc</span>
+<ul id="fold1_15" style="POSITION: relative; VISIBILITY: visible;"><li>bit test and complement, &#23558;&#36873;&#25321;&#30340;&#20301;&#25335;&#36125;&#21040;CF&#20013;&#65292;&#24182;&#23558;&#35813;&#20301;&#21462;&#21453;
+
+</li>
+
+</ul>
+</li>
+<li>&#20197;&#19978;4&#20010;&#25351;&#20196;&#23558;&#36873;&#25321;&#30340;&#20301;&#25335;&#36125;&#21040;CF&#20013;
+
+</li>
+
+</ul>
+</li>
+<li>&#20301;&#25195;&#25551;&#25351;&#20196;
+<ul><li><span id="show1_16" class="foldclosed" onClick="show_folder('1_16')" style="POSITION: absolute">+</span> <span id="hide1_16" class="foldopened" onClick="hide_folder('1_16')">-</span>
+<span style="font-family: SansSerif, sans-serif; font-weight: bold; ">bsf</span>
+<ul id="fold1_16" style="POSITION: relative; VISIBILITY: visible;"><li>bsf dest_reg, operand; bit scan forward
+
+</li>
+<li>&#20174;&#21491;&#21040;&#24038;&#25195;&#25551;&#65292;&#25214;&#21040;&#31532;&#19968;&#20010;1&#20986;&#29616;&#30340;&#20301;&#32622;
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_17" class="foldclosed" onClick="show_folder('1_17')" style="POSITION: absolute">+</span> <span id="hide1_17" class="foldopened" onClick="hide_folder('1_17')">-</span>
+<span style="font-family: SansSerif, sans-serif; font-weight: bold; ">bsr</span>
+<ul id="fold1_17" style="POSITION: relative; VISIBILITY: visible;"><li>bsf dest_reg, operand; bit scan reverse
+
+</li>
+<li>&#20174;&#24038;&#21040;&#21491;&#25195;&#25551;&#65292;&#25214;&#21040;&#31532;&#19968;&#20010;1&#20986;&#29616;&#30340;&#20301;&#32622;
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul><SCRIPT type="text/javascript">
+fold_document();
+</SCRIPT>
+</body>
+</html>
