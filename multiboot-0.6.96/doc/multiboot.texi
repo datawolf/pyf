@@ -769,6 +769,8 @@ changed them during the switch to 32-bit mode.
 
 FIXME: Split this chapter like the chapter ``OS image format''.
 
+FIXME: 将这章像 ``OS image format''那样分解。
+
 Upon entry to the operating system, the @code{EBX} register contains the
 physical address of a @dfn{Multiboot information} data structure,
 through which the boot loader communicates vital information to the
@@ -776,14 +778,73 @@ operating system. The operating system can use or ignore any parts of
 the structure as it chooses; all information passed by the boot loader
 is advisory only.
 
+在进入操作系统之前，@code{EBX} 寄存器包含了@dfn{Multiboot information}
+数据结构的物理地址，引导程序通过它将重要的引导信息传递给操作系统。
+操作系统可以按照自己的需要使用或者忽略任何部分；所有的引导程序传递的
+信息只是建议性的。
+
 The Multiboot information structure and its related substructures may be
 placed anywhere in memory by the boot loader (with the exception of the
 memory reserved for the kernel and boot modules, of course). It is the
 operating system's responsibility to avoid overwriting this memory until
 it is done using it.
 
+Multiboot信息结构和它的相关的子结构可以由引导程序放在任何位置（当然，除了
+保留给内核和引导模块的区域）。如何在利用该信息前保护它是操作系统的责任。
+
 The format of the Multiboot information structure (as defined so far)
 follows:
+
+Multiboot信息结构的格式（就目前为止定义的）如下：
+
+@example
+@group
+        +-------------------+
+0       | flags             |    (必须)
+        +-------------------+
+4       | mem_lower         |    (如果flags[0]被置位则出现)
+8       | mem_upper         |    (如果flags[0]被置位则出现)
+        +-------------------+
+12      | boot_device       |    (如果flags[1]被置位则出现)
+        +-------------------+
+16      | cmdline           |    (如果flags[1]被置位则出现)
+        +-------------------+
+20      | mods_count        |    (如果flags[1]被置位则出现)
+24      | mods_addr         |    (如果flags[1]被置位则出现)
+        +-------------------+
+28 - 40 | syms              |    (如果flags[4] 或
+        |                   |                flags[5]被置位则出现)
+        +-------------------+
+44      | mmap_length       |    (如果flags[6]被置位则出现)
+48      | mmap_addr         |    (如果flags[6]被置位则出现)
+        +-------------------+
+52      | drives_length     |    (如果flags[7]被置位则出现)
+56      | drives_addr       |    (如果flags[7]被置位则出现)
+        +-------------------+
+60      | config_table      |    (如果flags[8]被置位则出现)
+        +-------------------+
+64      | boot_loader_name  |    (如果flags[9]被置位则出现)
+        +-------------------+
+68      | apm_table         |    (如果flags[10]被置位则出现)
+        +-------------------+
+72      | vbe_control_info  |    (如果flags[11]被置位则出现)
+76      | vbe_mode_info     |
+80      | vbe_mode          |
+82      | vbe_interface_seg |
+84      | vbe_interface_off |
+86      | vbe_interface_len |
+        +-------------------+
+88      | framebuffer_addr  |    (如果flags[12]被置位则出现)
+96      | framebuffer_pitch |
+100     | framebuffer_width |
+104     | framebuffer_height|
+108     | framebuffer_bpp   |
+109     | framebuffer_type  |
+110-115 | color_info        |
+        +-------------------+
+
+@end group
+@end example
 
 @example
 @group
@@ -842,6 +903,11 @@ field also functions as a version indicator, allowing the Multiboot
 information structure to be expanded in the future without breaking
 anything.
 
+第一个longword指出Multiboot信息结构中的其它域是否有效。所有目前未定义
+的位必须被引导程序设为0。操作系统应该忽略任何它不理解的位。因此，@samp{flags}
+域也可以视作一个版本标志符，这样在将来可以无破坏的扩展Multiboot信息结构。
+
+
 If bit 0 in the @samp{flags} word is set, then the @samp{mem_*} fields
 are valid. @samp{mem_lower} and @samp{mem_upper} indicate the amount of
 lower and upper memory, respectively, in kilobytes. Lower memory starts
@@ -849,6 +915,11 @@ at address 0, and upper memory starts at address 1 megabyte. The maximum
 possible value for lower memory is 640 kilobytes. The value returned for
 upper memory is maximally the address of the first upper memory hole
 minus 1 megabyte. It is not guaranteed to be this value.
+
+如果设置了flags中的第0位，则mem_*域有效。mem_lower和mem_upper分别指出了
+低端和高端内存的大小，单位是Kb。低端内存的首地址是0，高端内存的首地址是
+1M。低端内存的最大可能值是640Kb。返回的高端内存的最大可能值是最大值减去
+1M，但并不保证是这个值。
 
 If bit 1 in the @samp{flags} word is set, then the @samp{boot_device}
 field is valid, and indicates which @sc{bios} disk device the boot
@@ -858,6 +929,11 @@ clear). The operating system may use this field as a hint for
 determining its own @dfn{root} device, but is not required to. The
 @samp{boot_device} field is laid out in four one-byte subfields as
 follows:
+
+如果设置了flags中的第1位，则boot_device域有效，并指出引导程序从哪个
+BIOS磁盘载入OS镜像。如果OS镜像不是从一个BIOS磁盘载入的，这个域就不能
+出现（第3位必须设置为0）。操作系统可以使用这个域帮助确定它的root设备，
+但并不一定要这么做。boot_device由四个单字节的子域组成：
 
 @example
 @group
@@ -873,6 +949,10 @@ as understood by the
 @sc{bios} INT 0x13 low-level disk interface: e.g. 0x00 for the first
 floppy disk or 0x80 for the first hard disk.
 
+第一个字节（最高有效字节）包含了bios驱动器号，它的格式与bios的INT 0x13低级磁盘接口相同：
+例如，0x00代表第一个软盘驱动器，0x80代表第一个硬盘驱动器。
+
+
 The three remaining bytes specify the boot partition. @samp{part1}
 specifies the @dfn{top-level} partition number, @samp{part2} specifies a
 @dfn{sub-partition} in the top-level partition, etc. Partition numbers
@@ -886,6 +966,13 @@ using BSD's @dfn{disklabel} strategy, then @samp{part1} contains the DOS
 partition number, @samp{part2} contains the BSD sub-partition within
 that DOS partition, and @samp{part3} is 0xFF.
 
+剩下的三个字节指出了引导分区。part1指出了顶级分区号，part2指出了顶级分区
+中的一个子分区，等等。分区号总是从0开始。不使用的分区字节必须被设置为0xFF。
+例如，如果磁盘被简单的分为单一的一层DOS分区，则part1包含这个DOS分区号，
+part2和part3都是0xFF。另一个例子是，如果一个磁盘首先被分为DOS分区，并且其中
+的一个DOS分区又被分为几个使用BSD磁盘标签策略的BSD分区，则part1包含DOS分区号，
+part2包含DOS分区内的BSD分区号，part3则是0xFF。
+
 DOS extended partitions are indicated as partition numbers starting from
 4 and increasing, rather than as nested sub-partitions, even though the
 underlying disk layout of extended partitions is hierarchical in
@@ -893,6 +980,10 @@ nature. For example, if the boot loader boots from the second extended
 partition on a disk partitioned in conventional DOS style, then
 @samp{part1} will be 5, and @samp{part2} and @samp{part3} will both be
 0xFF.
+
+DOS扩展分区的分区号从4开始，而不是像嵌套子分区一样，尽管扩展分区的底层分布
+就是分层嵌套的。例如，如果引导程序从传统的DOS风格磁盘的第二个分区启动，则
+part1是5，part2和part3都是0xFF。
 
 If bit 2 of the @samp{flags} longword is set, the @samp{cmdline} field
 is valid, and contains the physical address of the command line to
@@ -903,6 +994,13 @@ control on command line independently of other factors like image name.
 Boot loaders with specific payload in mind may completely or partially generate
 it algorithmically.
 
+如果设置了flags longword的第2位，则cmdline域是有效的，并且包含要传递
+给内核的命令行参数的物理地址。命令行参数是一个正常C风格的以0终止的字符串。
+命令行参数的具体格式留给操作系统的开发者决定。通用引导程序应该允许用户完全
+控制命令行，独立于像镜像名称这样的其它因素。含有具体有效载荷引导装载程序
+可以完全或部分通过算法生成它。
+
+
 If bit 3 of the @samp{flags} is set, then the @samp{mods} fields
 indicate to the kernel what boot modules were loaded along with the
 kernel image, and where they can be found. @samp{mods_count} contains
@@ -910,6 +1008,11 @@ the number of modules loaded; @samp{mods_addr} contains the physical
 address of the first module structure. @samp{mods_count} may be zero,
 indicating no boot modules were loaded, even if bit 3 of @samp{flags} is
 set. Each module structure is formatted as follows:
+
+如果设置了flags的第3位，则mods域指出了同内核一同载入的有哪些引导模块，以及
+他们在哪里能找到他们。mods_count包含了需要加载的模块的个数；mods_addr包含了
+第一个模块结构的物理地址。mods_count可以是0，这表示没有载入任何模块，即使
+设置了flags的第3位时也可能是这样。每个模块的结构的格式如下：
 
 @example
 @group
@@ -935,10 +1038,22 @@ system treats boot modules as files in a file system), but its exact use
 is specific to the operating system. The @samp{reserved} field must be
 set to 0 by the boot loader and ignored by the operating system.
 
+前两个域包含了引导模块的开始和结束地址。string域提供了一个自定义的与引导模块
+相关的字符串；它是一个以0终止的ASCII字符串，同内核命令行参数一个。
+如果没有什么与模块有关的字符串，string域可以是0。典型情况下，这个字符串也许是
+命令行参数（例如，如果操作系统将引导程序视作可执行程序的话），或者一个路径名
+（例如，如果操作系统将引导程序视作文件系统中的文件的话），它的意义取决于操作系统。
+reserved域必须由引导程序设为0并被操作系统忽略。
+
 @strong{Caution:} Bits 4 & 5 are mutually exclusive.
+
+@strong{注意:} 第4位和第5位是互斥的。
 
 If bit 4 in the @samp{flags} word is set, then the following fields in
 the Multiboot information structure starting at byte 28 are valid:
+
+如果设置了flags的第4位，则下面从Multiboot信息结构的第28位开始的域是有效的：
+
 
 @example
 @group
@@ -963,9 +1078,17 @@ the beginning of the string section) of the following string table to
 which the symbol table refers. Note that @samp{tabsize} may be 0,
 indicating no symbols, even if bit 4 in the @samp{flags} word is set.
 
+这指出在哪里可以找到a.out格式内核映像的符号表。addr是a.out格式的nlist
+结构数组的大小（4字节无符号长整数）的物理地址，紧接着是数组本身，然后是
+一系列以0终止的ASCII字符串的大小（4字节无符号长整数，加上sizeof（unsigned long））
+，然后是字符串本身。tabsize等于符号表的大小参数（位于符号section的头部），
+strsize等于符号表指向的字符串的大小参数（位于string section的头部）。
+注意，tabsize可以是0，这意味着没有符号，尽管已经设置了flags的第4位。
+
 If bit 5 in the @samp{flags} word is set, then the following fields in
 the Multiboot information structure starting at byte 28 are valid:
 
+如果设置了flags的第5位，则下面从Multiboot信息结构的第28位开始的域是有效的：
 @example
 @group
         +-------------------+
@@ -988,12 +1111,25 @@ details as to how to read the section header(s)). Note that
 @samp{shdr_num} may be 0, indicating no symbols, even if bit 5 in the
 @samp{flags} word is set.
 
+这指出在哪里可以找到ELF格式内核映像的section头表、每项的大小、一共有几项
+以及作为名字索引的字符串表。他们对应于可执行可链接格式（ELF）的程序头中
+的shdr_*项（shdr_num等）。所有的section都会被载入，ELF section头的物理地址
+域指向所有的section在内存的位置（参见i386 ELF文档可以得到如何读取section头
+的更多的细节）。注意，shdr_num可以是0，标志着没有符号，尽管已经设置了flags
+的第5位。
+
+
 If bit 6 in the @samp{flags} word is set, then the @samp{mmap_*} fields
 are valid, and indicate the address and length of a buffer containing a
 memory map of the machine provided by the @sc{bios}. @samp{mmap_addr} is
 the address, and @samp{mmap_length} is the total size of the buffer. The
 buffer consists of one or more of the following size/structure pairs
 (@samp{size} is really used for skipping to the next pair):
+
+
+如果设置了flags的第6位，则mmap_*域是有效的，指出保存有BIOS提供的内存分布的
+缓冲区的地址和长度。mmap_addr是缓冲区的地址，mmap_length是缓冲区的总大小。
+缓冲区有一个或者多个下面的大小/结构对（size实际上是用来跳过下一个对的）组成的：
 
 @example
 @group
@@ -1016,8 +1152,16 @@ holding ACPI information, value of 4 indicates reserved memory which needs to
 be preserved on hibernation, value of 5 indicates a memory which is occupied by defective RAM modules and all other values currently
 indicated a reserved area.
 
+size是相关结构的大小，单位是字节，它可能大于最小值20。base_addr是起始地址，
+length是内存区域大小。type是相应地址区间的类型，1代表可用ram，3代表可用内存
+保存ACPI信息，4代表需要为休眠保留的内存，5代表这是由缺陷内存模块占用的内存。
+所有其它的值代表保留区域。
+
+
 The map provided is guaranteed to list all standard @sc{ram} that should
 be available for normal use.
+
+可以保证所提供的内存分布列出了所有可供正常使用的标准内存。
 
 If bit 7 in the @samp{flags} is set, then the @samp{drives_*} fields
 are valid, and indicate the address of the physical address of the first
@@ -1025,6 +1169,11 @@ drive structure and the size of drive structures. @samp{drives_addr}
 is the address, and @samp{drives_length} is the total size of drive
 structures. Note that @samp{drives_length} may be zero. Each drive
 structure is formatted as follows:
+
+
+如果设置了flags的第7位，则drives_*域是有效的，指出第一个驱动器的物理地址
+和这个结构的大小。drives_addr是地址，drives_length是驱动器结构的总大小。
+注意drives_length可以是0。每个驱动器结构的格式如下：
 
 @example
 @group
@@ -1048,16 +1197,23 @@ The @samp{size} field specifies the size of this structure. The size
 varies, depending on the number of ports. Note that the size may not be
 equal to (10 + 2 * the number of ports), because of an alignment.
 
+size域指出了结构的大小，依据端口的数量，这个大小可能变化。注意，这个大小
+可能不等于（10+2*端口的数量），这是由于对齐的原因。
+
 The @samp{drive_number} field contains the BIOS drive number. The
 @samp{drive_mode} field represents the access mode used by the boot
 loader. Currently, the following modes are defined:
 
+drive_number域包含BIOS驱动器号，drive_mode域代表了引导程序使用的访问模式，目前，
+定义了如下的模式：
+
 @table @samp
 @item 0
 CHS mode (traditional cylinder/head/sector addressing mode).
-
+CHS 模式（传统的“柱面/磁头/扇区”寻址模式）。
 @item 1
 LBA mode (Logical Block Addressing mode).
+LBA 模式（逻辑块寻址模式）。
 @end table
 
 The three fields, @samp{drive_cylinders}, @samp{drive_heads} and
@@ -1067,25 +1223,46 @@ cylinders. @samp{drive_heads} contains the number of the
 heads. @samp{drive_sectors} contains the number of the sectors per
 track.
 
+@samp{drive_cylinders}, @samp{drive_heads} 和 @samp{drive_sectors}这三个域指出
+了BIOS检测到的驱动器参数。@samp{dirve_cylinders}包含柱面数，@samp{drive_heads}
+包含磁头数，@samp{drive_sectors}包含每磁道的扇区数。
+
 The @samp{drive_ports} field contains the array of the I/O ports used
 for the drive in the @sc{bios} code. The array consists of zero or more
 unsigned two-bytes integers, and is terminated with zero. Note that the
 array may contain any number of I/O ports that are not related to the
 drive actually (such as @sc{dma} controller's ports).
 
+drive_ports域包含了BIOS代码使用的I/O端口的数组，这个数组包含了0个或者多个无符号
+两字节整数，并且以0终止。注意，数组中可能包含任何实际上与驱动器不相关的I/O端口
+（例如DMA控制器端口）。
+
 If bit 8 in the @samp{flags} is set, then the @samp{config_table} field
 is valid, and indicates the address of the @sc{rom} configuration table
 returned by the @dfn{GET CONFIGURATION} @sc{bios} call. If the @sc{bios}
 call fails, then the size of the table must be @emph{zero}.
+
+如果设置了flags中的第8位，则config_table域是有效的，它指出了由@dfn{GET CONFIGURATION}
+BIOS调用返回的ROM配置表的地址。如果这个BIOS调用失败了，这个表的大小
+必须是0。
+
 
 If bit 9 in the @samp{flags} is set, the @samp{boot_loader_name} field
 is valid, and contains the physical address of the name of a boot
 loader booting the kernel. The name is a normal C-style zero-terminated
 string.
 
+
+如果设置了flags域中的第9位，则boot_loader_name域是有效的，并且包含了引导程序
+名字在物理内存中的地址，引导程序的名字是正常的C风格的以0终止的字符串。
+
+
 If bit 10 in the @samp{flags} is set, the @samp{apm_table} field is
 valid, and contains the physical address of an @sc{apm} table defined as
 below:
+
+
+如果设置了flags的第10位，则apm_table域是有效的。并且包含了如下apm表的物理地址：
 
 @example
 @group
@@ -1115,15 +1292,30 @@ bytes, and the others are 2 bytes. See
 @uref{http://www.microsoft.com/hwdev/busbios/amp_12.htm, Advanced Power
 Management (APM) BIOS Interface Specification}, for more information.
 
+
+域version、cseg、offset、cseg_16、dseg、flags、cseg_len、cseg_16_len、dseg_len分别
+指出了版本号、保护模式32位代码段、入口点的偏移量、保护模式16位代码段、保护模式16位
+数据段、标志位、保护模式32位代码段的长度、保护模式16位代码段的长度和保护模式16位数
+据段的长度。只有offset域是4字节，其余的域都是2字节。
+参见高级电源管理（APM）BIOS接口规范，获得更多信息。
+
+
 If bit 11 in the @samp{flags} is set, the @sc{vbe} table is available.
+
+如果设置了flags的第11位，则vbe表是可见的。
 
 The fields @samp{vbe_control_info} and @samp{vbe_mode_info} contain
 the physical addresses of @sc{vbe} control information returned by the
 @sc{vbe} Function 00h and @sc{vbe} mode information returned by the
 @sc{vbe} Function 01h, respectively.
 
+域vbe_control_info和vbe_mode_info分别包含由VBE函数00h返回的VBE控制信息
+的物理地址和由VBE函数01h返回的VBE模式信息。
+
 The field @samp{vbe_mode} indicates current video mode in the format
 specified in @sc{vbe} 3.0.
+
+域vbe_mode指出了当前的显示模式，其中的信息符合VBE 3.0标准。
 
 The rest fields @samp{vbe_interface_seg}, @samp{vbe_interface_off}, and
 @samp{vbe_interface_len} contain the table of a protected mode interface
@@ -1133,11 +1325,20 @@ mode interface which is incompatible with the old one. If you want to
 use the new protected mode interface, you will have to find the table
 yourself.
 
+其余的域vbe_interface_seg、vbe_interface_off和vbe_interface_len包含了
+VBE 2.0+中定义的保护模式接口。如果没有这些信息，这些域都是0 。注意VBE 3.0
+定义了另一个保护模式接口，它与以前的版本是兼容的。如果你想要使用这
+些新的保护模式接口，你必须自己找到这个表。
+
 The fields for the graphics table are designed for @sc{vbe}, but
 Multiboot boot loaders may simulate @sc{vbe} on non-@sc{vbe} modes, as
 if they were @sc{vbe} modes.
 
+graphics table中的域是按照VBE设计的，但是Multiboot引导程序可以在非VBE模式下模拟VBE模式。
+
 If bit 12 in the @samp{flags} is set, the @sc{Framebuffer} table is available.
+
+如果设置了flags域的第12位，则Framebuffer表是可见的。
 
 The field @samp{framebuffer_addr} contains framebuffer physical address. This
 field is 64-bit wide but bootloader @dfn{should} set it under 4 GiB if possible
@@ -1147,6 +1348,15 @@ for compatibility with kernels which aren't aware of PAE or AMD64. The field
 dimensions in pixels. The field @samp{framebuffer_bpp} contains the number of
 bits per pixel. If @samp{framebuffer_type} is set to @samp{0} it means
 indexed color will be used. In this case color_info is defined as follows:
+
+framebuffer_addr域包含了framebuffer的物理地址。该字段是64位宽度，但是如果可能的
+话引导程序应该将其设置在4GiB以下，这是为了兼容那些不了解PAE或者AMD64的内核。
+域framebuffer_pitch包含以字节为单位的帧缓冲间距。域framebuffer_width，framebuffer_height
+包含了以像素为单位的帧缓冲区尺寸。  域framebuffer_bpp包含了每个像素的比特数。
+如果域framebuffer_type设置为0，则表示索引颜色将被使用，在这种情况下，颜色信息的
+定义如下：
+
+
 @example
 @group
         +----------------------------------+
@@ -1158,6 +1368,10 @@ indexed color will be used. In this case color_info is defined as follows:
 @samp{framebuffer_palette_addr} contains the address of the color palette,
 which is an array of color descriptors. Each color descriptor has the
 following structure:
+
+域framebuffer_palette_addr包含了调色版的地址，它是颜色描述符的数组的地址，
+每种颜色描述符具有如下结构：
+
 @example
 @group
         +-------------+
@@ -1169,6 +1383,9 @@ following structure:
 @end example
 If @samp{framebuffer_type} is set to @samp{1} it means direct RGB color will
 be used. Then color_type is defined as follows:
+
+
+如果域framebuffer_type设置为1，意味着直接RGB颜色将被使用，color_type的定义如下：
 
 @example
 @group
@@ -1190,12 +1407,21 @@ will be used. In this case @samp{framebuffer_width} and
 @samp{framebuffer_pitch} is expressed in bytes per text line.
 All further values of @samp{framebuffer_type} are reserved for future expansion.
 
+如果framebuffer_type域被设置为2，这意味着EGA标准的文本模式将被使用。在这种情况下
+域framebuffer_width和framebuffer_height以字符为单位而不是像素。域framebuffer_bpp
+等于16（每个字符的位数），域framebuffer_pitch表示每个文本行的字节数。
+
+framebuffer_type域的其它所有值，为将来的扩展保留。
+
 @node Examples
 @chapter Examples
 
 @strong{Caution:} The following items are not part of the specification
 document, but are included for prospective operating system and boot
 loader writers.
+
+@strong{注意：} Multiboot规范并不包含下面的部分，但是下面章节的内容可以
+为未来的操作系统和启动程序的作者提供参考。
 
 @menu
 * Notes on PC::                 
@@ -1215,6 +1441,10 @@ description about bit 6), then a maximum of either 15 or 63 megabytes of
 memory may be reported. It is @emph{highly} recommended that boot
 loaders perform a thorough memory probe.
 
+在使用Multiboot信息结构中flags域中的第0位时，如果使用的引导程序使用较老
+的BIOS接口，或者还不被支持的最新的接口（参见有关第6位的描述），则返回的
+内存大小可能是15或者63M。因此，强烈推荐引导程序进行彻底的内存检查。
+
 In reference to bit 1 of the @samp{flags} parameter in the Multiboot
 information structure, it is recognized that determination of which
 @sc{bios} drive maps to which device driver in an operating system is
@@ -1223,6 +1453,12 @@ systems instead of solving this problem, most of them breaking under
 many conditions. To encourage the use of general-purpose solutions to
 this problem, there are 2 @sc{bios} device mapping techniques
 (@pxref{BIOS device mapping techniques}). 
+
+在使用Multiboot信息结构中flags域中的第1位时,我们发现在最好的情况下，将
+哪个BIOS驱动器映射到哪个操作系统的设备驱动的决定也不容易作出。不同的操作
+系统提出了许多笨拙的 办法来解决这个问题，但是大多数在很多情况下都会失败。
+为了鼓励使用通用的方法来解决这个问题，我们提出来了2种BIOS设备映射技术
+（参加@pxref{BIOS device mapping techniques}）。
 
 In reference to bit 6 of the @samp{flags} parameter in the Multiboot
 information structure, it is important to note that the data structure
@@ -1234,6 +1470,13 @@ boot loader to work unmodified with any reasonable extensions of the
 @sc{bios} interface, passing along any extra data to be interpreted by
 the operating system as desired.
 
+在使用Mulitboot信息结构中flags域的第6位时，一定要注意这里用到的数据结构
+（自@samp{BaseAddrLow}开始），该数据是由INT 15h，AX=E820h返回的数据——查询
+系统地址映射调用。获取更多信息，请参见 @xref{Query System Address Map, ,
+Query System Address Map, grub.info, The GRUB Manual},这里的接口用来使
+一个引导程序可以不用修改的同进行过合理扩展的BIOS接口共同的工作，这些
+扩展只是给予操作系统期望的更多的信息。
+
 
 @node BIOS device mapping techniques
 @section BIOS device mapping techniques
@@ -1243,14 +1486,24 @@ and neither require any special support in the drivers themselves. This
 section will be flushed out into detailed explanations, particularly for
 the I/O restriction technique.
 
+这两个技术可以用于任何的PC操作系统，并且也不需要驱动程序本身提供任何的特殊
+支持。本节将大量的讨论细节问题，尤其是IO限制技术。
+
 The general rule is that the data comparison technique is the quick and
 dirty solution. It works most of the time, but doesn't cover all the
 bases, and is relatively simple.
+
+通用的规则是数据比较技术，它是快速但丑陋的方案。它在大多数情况下工作正常，
+但是并不总是这样，不过它相对简单。
 
 The I/O restriction technique is much more complex, but it has potential
 to solve the problem under all conditions, plus allow access of the
 remaining @sc{bios} devices when not all of them have operating system
 drivers.
+
+I/O限制技术要复杂的多，但它更有可能在所有情况下解决问题，另外，还允许
+在并非所有的BIOS设备拥有操作系统的驱动程序时访问有驱动程序的BIOS设备。
+
 
 @menu
 * Data comparison technique::   
@@ -1265,11 +1518,19 @@ Before activating @emph{any} of the device drivers, gather enough data
 from similar sectors on each of the disks such that each one can be
 uniquely identified.
 
+在激活任何设备驱动程序之前，要从每个磁盘上的相似扇区中收集足够的数据，
+这样就可以区分每一个扇区。
+
 After activating the device drivers, compare data from the drives using
 the operating system drivers. This should hopefully be sufficient to
 provide such a mapping.
 
+在激活了设备驱动程序后，使用操作系统驱动比较不同驱动器的数据。这样就可以
+为映射提供足够的信息。
+
 Problems:
+
+问题：
 
 @enumerate
 @item
@@ -1277,10 +1538,15 @@ The data on some @sc{bios} devices might be identical (so the part
 reading the drives from the @sc{bios} should have some mechanism to give
 up).
 
+一些BIOS设备上的数据可能是相同的（所以从BIOS读取设备信息的方法可能失败）。
+
 @item
 There might be extra drives not accessible from the @sc{bios} which are
 identical to some drive used by the @sc{bios} (so it should be capable
 of giving up there as well).
+
+可能有一些BIOS不可访问的设备同BIOS用到的设备相同（所以这时这个方法也
+可能宣告失败）。
 @end enumerate
 
 
@@ -1292,34 +1558,53 @@ mappings for the device drivers writing into @sc{pc} @sc{ram}. Keep the
 original copies for the @dfn{clean @sc{bios} virtual machine} to be
 created later.
 
+第一步并不是必要的，但首先为设备驱动程序创建copy-on-wrire映射。随后创建
+洁净BIOS虚拟机的原始拷贝。
+
 For each device driver brought online, determine which @sc{bios} devices
 become inaccessible by:
+
+对于每一个设备驱动程序，决定哪个BIOS不可访问，方法是：
+
 
 @enumerate
 @item
 Create a @dfn{clean @sc{bios} virtual machine}.
 
+创建一个洁净的BIOS虚拟机。
+
 @item
 Set the I/O permission map for the I/O area claimed by the device driver
 to no permissions (neither read nor write).
 
+将设备驱动程序要求的I/O区域在I/O允许位图中设置为无权限（即不能写也不能读）。
+
 @item
 Access each device.
+
+访问每一个设备。
 
 @item
 Record which devices succeed, and those which try to access the
 @dfn{restricted} I/O areas (hopefully, this will be an @dfn{xor}
 situation).
+
+记录哪些设备访问成功，以及哪些试图访问受限I/O区域（这将可能是一个xor情景）
 @end enumerate
 
 For each device driver, given how many of the @sc{bios} devices were
 subsumed by it (there should be no gaps in this list), it should be easy
 to determine which devices on the controller these are.
 
+对于每个设备驱动程序，假设已知其中有多少个BIOS设备（这个表中应该没有缝隙），
+应该很容易的确定哪些设备受这些控制器控制。
+
 In general, you have at most 2 disks from each controller given
 @sc{bios} numbers, but they pretty much always count from the lowest
 logically numbered devices on the controller.
 
+通常，每个拥有BIOS号的控制器上你至少有两个磁盘，他们总是从控制器逻辑号
+最低的设备数起。
 
 @node Example OS code
 @section Example OS code
@@ -1330,6 +1615,11 @@ on the screen, so you can make use of the kernel to test a
 Multiboot-compliant boot loader and for reference to how to implement a
 Multiboot kernel. The source files can be found under the directory
 @file{doc} in the Multiboot source distribution.
+
+在这个发行版本中，包括了示例Multiboot内核kernel。这个内核只是在屏幕上
+输出Multiboot信息结构，所以你可以利用这个内核检测一个Multiboot兼容的
+引导程序，或者作为如何实现一个Multiboot兼容的内核的参考。源文件可以在
+Multiboot发行版本的doc目录中找到。
 
 The kernel @file{kernel} consists of only three files: @file{boot.S},
 @file{kernel.c} and @file{multiboot.h}. The assembly source
@@ -1347,6 +1637,14 @@ so on, and some functions to print messages on the screen. The file
 Multiboot header, the Multiboot header structure and the Multiboot
 information structure.
 
+内核kernel仅有3个文件组成：boot.S,kernel.c和multiboot.h。汇编源代码boot.S
+使用GAS汇编格式，包含符合本规范的Multiboot信息结构。当一个Multiboot兼容的引导
+程序载入并执行它时，它初始化堆栈指针和@code{EFLAGS}，然后调用kernel.c中
+定义的函数cmain。如果cmain返回，则它显示一条信息通知用户进入停机状态
+并停止执行直到你按下reset键。文件kernel.c包含函数cmain，它检查引导程序
+传递过来的魔数是否有效等等，以及一些向屏幕输出消息的函数。文件Multiboot.h定义了
+一些宏，如Multiboot头的魔数，Multiboot头结构和Multiboot信息结构等。
+
 @menu
 * multiboot.h::                 
 * boot.S::                      
@@ -1360,6 +1658,8 @@ information structure.
 
 This is the source code in the file @file{multiboot.h}:
 
+这是文件@file{multiboot.h}中的源代码：
+
 @example
 @include multiboot.h.texi
 @end example
@@ -1370,6 +1670,8 @@ This is the source code in the file @file{multiboot.h}:
 
 In the file @file{boot.S}:
 
+这是文件@file{boot.S}中的源代码：
+
 @example
 @include boot.S.texi
 @end example
@@ -1379,6 +1681,8 @@ In the file @file{boot.S}:
 @subsection kernel.c
 
 And, in the file @file{kernel.c}:
+
+这是文件@file{kernel.c}中的源代码：
 
 @example
 @include kernel.c.texi
@@ -1405,8 +1709,17 @@ not been made, but the test release is available from:
 
 @url{ftp://alpha.gnu.org/gnu/grub}
 
+GNU GRUN (@pxref{Top, , GRUB, grub.info, The GRUB manual})项目是一个Multiboot
+兼容的boot loader，它支持该规范中所有必须的和
+和大多数可选的特征。它还没有发布正式版，但是其测试版本的地址如下：
+
+@url{ftp://alpha.gnu.org/gnu/grub}
+
 See the webpage @url{http://www.gnu.org/software/grub/grub.html}, for
 more information.
+
+
+可以从其网页上 @url{http://www.gnu.org/software/grub/grub.html}, 获得更多信息。
 
 
 @node History
@@ -1481,6 +1794,9 @@ Major changes plus HTMLification.
 The program @command{mbchk} checks for the format of a Multiboot
 kernel. We recommend using this program before booting your own kernel.
 
+程序@command{mbchk}检查一个内核是否是Multiboot兼容的。我们推荐在启动
+你自己的内核前使用该程序。
+
 @command{mbchk} accepts the following options:
 
 @command{mbchk} 接受如下选项参数：
@@ -1498,6 +1814,8 @@ Print the version number of GRUB and exit.
 
 @item --quiet
 Suppress all normal output.
+
+禁止一起正常的输出。
 @end table
 
 

@@ -28,9 +28,11 @@
 #define MULTIBOOT_HEADER_ALIGN			4
 
 /* The magic field should contain this.  */
+/* Multiboot header 的魔数  */
 #define MULTIBOOT_HEADER_MAGIC			0x1BADB002
 
 /* This should be in %eax.  */
+/* Multiboot兼容的引导程序传递来的魔数  */
 #define MULTIBOOT_BOOTLOADER_MAGIC		0x2BADB002
 
 /* Alignment of multiboot modules.  */
@@ -97,6 +99,9 @@ typedef unsigned short		multiboot_uint16_t;
 typedef unsigned int		multiboot_uint32_t;
 typedef unsigned long long	multiboot_uint64_t;
 
+
+/* multiboot header  */
+/* 总共48个字节  */
 struct multiboot_header
 {
   /* Must be MULTIBOOT_MAGIC - see above.  */
@@ -145,22 +150,29 @@ typedef struct multiboot_elf_section_header_table multiboot_elf_section_header_t
 struct multiboot_info
 {
   /* Multiboot info version number */
+  /* 0--3  */
   multiboot_uint32_t flags;
 
   /* Available memory from BIOS */
+  /* 4--11  */
   multiboot_uint32_t mem_lower;
   multiboot_uint32_t mem_upper;
 
   /* "root" partition */
+  /* 12--15  */
   multiboot_uint32_t boot_device;
 
   /* Kernel command line */
+  /* 16--19 */
   multiboot_uint32_t cmdline;
 
   /* Boot-Module list */
+  /* 20--27  */
   multiboot_uint32_t mods_count;
   multiboot_uint32_t mods_addr;
 
+
+  /* 28--43  */
   union
   {
     multiboot_aout_symbol_table_t aout_sym;
@@ -168,23 +180,29 @@ struct multiboot_info
   } u;
 
   /* Memory Mapping buffer */
+  /* 44--51 */
   multiboot_uint32_t mmap_length;
   multiboot_uint32_t mmap_addr;
 
   /* Drive Info buffer */
+  /* 52--59  */
   multiboot_uint32_t drives_length;
   multiboot_uint32_t drives_addr;
 
   /* ROM configuration table */
+  /* 60--63 */
   multiboot_uint32_t config_table;
 
   /* Boot Loader Name */
+  /* 64--67 */
   multiboot_uint32_t boot_loader_name;
 
   /* APM table */
+  /* 68--71 */
   multiboot_uint32_t apm_table;
 
   /* Video */
+  /* 72--87 */
   multiboot_uint32_t vbe_control_info;
   multiboot_uint32_t vbe_mode_info;
   multiboot_uint16_t vbe_mode;
@@ -192,6 +210,8 @@ struct multiboot_info
   multiboot_uint16_t vbe_interface_off;
   multiboot_uint16_t vbe_interface_len;
 
+
+  /* 88--109 */
   multiboot_uint64_t framebuffer_addr;
   multiboot_uint32_t framebuffer_pitch;
   multiboot_uint32_t framebuffer_width;
@@ -201,6 +221,9 @@ struct multiboot_info
 #define MULTIBOOT_FRAMEBUFFER_TYPE_RGB     1
 #define MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT	2
   multiboot_uint8_t framebuffer_type;
+
+
+  /* 110--115 */
   union
   {
     struct

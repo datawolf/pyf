@@ -236,12 +236,12 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/wanglong/multiboot/multiboot-0.6.96/missing aclocal-1.13
+ACLOCAL = ${SHELL} /home/wanglong/github/pyf/multiboot-0.6.96/missing aclocal-1.13
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /home/wanglong/multiboot/multiboot-0.6.96/missing autoconf
-AUTOHEADER = ${SHELL} /home/wanglong/multiboot/multiboot-0.6.96/missing autoheader
-AUTOMAKE = ${SHELL} /home/wanglong/multiboot/multiboot-0.6.96/missing automake-1.13
+AUTOCONF = ${SHELL} /home/wanglong/github/pyf/multiboot-0.6.96/missing autoconf
+AUTOHEADER = ${SHELL} /home/wanglong/github/pyf/multiboot-0.6.96/missing autoheader
+AUTOMAKE = ${SHELL} /home/wanglong/github/pyf/multiboot-0.6.96/missing automake-1.13
 AWK = gawk
 CC = gcc
 CCAS = gcc
@@ -267,7 +267,7 @@ LDFLAGS =
 LIBOBJS = 
 LIBS = 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/wanglong/multiboot/multiboot-0.6.96/missing makeinfo
+MAKEINFO = ${SHELL} /home/wanglong/github/pyf/multiboot-0.6.96/missing makeinfo
 MKDIR_P = /bin/mkdir -p
 OBJEXT = o
 PACKAGE = multiboot
@@ -282,10 +282,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 0.6.96
-abs_builddir = /home/wanglong/multiboot/multiboot-0.6.96/doc
-abs_srcdir = /home/wanglong/multiboot/multiboot-0.6.96/doc
-abs_top_builddir = /home/wanglong/multiboot/multiboot-0.6.96
-abs_top_srcdir = /home/wanglong/multiboot/multiboot-0.6.96
+abs_builddir = /home/wanglong/github/pyf/multiboot-0.6.96/doc
+abs_srcdir = /home/wanglong/github/pyf/multiboot-0.6.96/doc
+abs_top_builddir = /home/wanglong/github/pyf/multiboot-0.6.96
+abs_top_srcdir = /home/wanglong/github/pyf/multiboot-0.6.96
 ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
@@ -304,7 +304,7 @@ host_alias =
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/wanglong/multiboot/multiboot-0.6.96/install-sh
+install_sh = ${SHELL} /home/wanglong/github/pyf/multiboot-0.6.96/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -330,11 +330,11 @@ multiboot_TEXINFOS = boot.S.texi kernel.c.texi multiboot.h.texi
 SRC2TEXI = src2texi
 noinst_SCRIPTS = $(SRC2TEXI)
 pkginclude_HEADERS = multiboot.h
-kernel_SOURCES = $(EXAMPLES)
-kernel_CPPFLAGS = -m32 -nostdlib -fno-builtin -nostdinc -O -g -Wall \
-	-imacros $(top_builddir)/config.h
+#kernel_SOURCES = $(EXAMPLES)
+#kernel_CPPFLAGS = -m32 -nostdlib -fno-builtin -nostdinc -O -g -Wall \
+#	-imacros $(top_builddir)/config.h
 
-kernel_LDFLAGS = -m32 -nostdlib -Wl,-N -Wl,-Ttext -Wl,100000 -Wl,--build-id=none
+#kernel_LDFLAGS = -m32 -nostdlib -Wl,-N -Wl,-Ttext -Wl,100000 -Wl,--build-id=none
 EXTRA_DIST = $(man_MANS) $(noinst_SCRIPTS) \
 	$(EXAMPLES) $(multiboot_TEXINFOS)
 
